@@ -46,9 +46,9 @@ function Services() {
           </motion.h1>
           <div className="services-section grid grid-cols-1 md:grid-cols-3 gap-8 perspective-1000">
             {[
-              { title: 'Custom Garages', img: './src/assets/garage-service1.jpg', desc: 'Bespoke designs tailored to your needs.', link: '#custom-garages' },
-              { title: 'Renovations', img: './src/assets/garage-service2.jpg', desc: 'Modernize your existing garage.', link: '#renovations' },
-              { title: 'Commercial Projects', img: './src/assets/garage-hero.jpg', desc: 'Robust solutions for businesses.', link: '#commercial' },
+              { title: 'Custom Garages', img: 'garage-service1.jpg', desc: 'Bespoke designs tailored to your needs.', link: '#custom-garages' },
+              { title: 'Renovations', img: 'garage-service2.jpg', desc: 'Modernize your existing garage.', link: '#renovations' },
+              { title: 'Commercial Projects', img: 'garage-hero.jpg', desc: 'Robust solutions for businesses.', link: '#commercial' },
             ].map((service) => (
               <motion.div
                 key={service.title}
