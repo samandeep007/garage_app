@@ -108,9 +108,9 @@ function Home() {
       <section className="relative min-h-screen flex items-center justify-center perspective-1000">
         <Slider {...carouselSettings} className="w-full h-screen">
           {[
-            { img: 'assets/garage-hero.jpg', title: 'Build Your Dream Garage with KARTAR Construction', subtitle: 'Crafting exceptional garages in Calgary with precision and innovation since 2000.' },
-            { img: 'assets/garage-service1.jpg', title: 'Transform Your Space with Expert Renovations', subtitle: 'Modernize your garage with KARTAR’s innovative solutions.' },
-            { img: 'assets/garage-service2.jpg', title: 'Commercial Garages Built to Last', subtitle: 'Durable, high-capacity solutions for businesses in Calgary.' },
+            { img: './src/assets/garage-hero.jpg', title: 'Build Your Dream Garage with KARTAR Construction', subtitle: 'Crafting exceptional garages in Calgary with precision and innovation since 2000.' },
+            { img: './srca/ssets/garage-service1.jpg', title: 'Transform Your Space with Expert Renovations', subtitle: 'Modernize your garage with KARTAR’s innovative solutions.' },
+            { img: './src/assets/garage-service2.jpg', title: 'Commercial Garages Built to Last', subtitle: 'Durable, high-capacity solutions for businesses in Calgary.' },
           ].map((slide, index) => (
             <div key={index} className="relative h-screen">
               <img
