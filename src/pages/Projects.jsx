@@ -1,37 +1,46 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Helmet } from 'react-helmet-async';
-import { FaEye, FaTimes } from 'react-icons/fa';
+import { FaEye, FaTimes, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import 'animate.css';
 
-gsap.registerPlugin(ScrollTrigger);
+// Dynamically import all .jpg files from src/assets/photos
+const photos = import.meta.glob('../assets/photos/*.jpg', { eager: true });
 
 function Projects() {
   const [selectedProject, setSelectedProject] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    gsap.fromTo(
-      '.project-card',
-      { opacity: 0, y: 50 },
-      {
-        opacity: 1,
-        y: 0,
-        stagger: 0.2,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: '.projects-section',
-          start: 'top 80%',
-        },
-      }
-    );
+    // No GSAP, relying on animate.css classes
   }, []);
 
-  const projects = [
-    { title: 'Residential Garage', img: '/assets/garage-hero.jpg', desc: 'A modern residential masterpiece with smart storage solutions.' },
-    { title: 'Garage Renovation', img: '/assets/garage-service1.jpg', desc: 'Transformed an outdated garage into a sleek, functional workspace.' },
-    { title: 'Commercial Build', img: '/assets/garage-service2.jpg', desc: 'Durable, high-capacity garage designed for business needs.' },
-  ];
+  // Convert the glob import object into an array of project objects
+  const projects = Object.values(photos).map((photo, index) => ({
+    img: photo.default,
+  }));
+
+  const openModal = (index) => {
+    setCurrentIndex(index);
+    setSelectedProject(projects[index]);
+  };
+
+  const closeModal = () => {
+    setSelectedProject(null);
+    setCurrentIndex(0);
+  };
+
+  const nextImage = () => {
+    const nextIndex = (currentIndex + 1) % projects.length;
+    setCurrentIndex(nextIndex);
+    setSelectedProject(projects[nextIndex]);
+  };
+
+  const prevImage = () => {
+    const prevIndex = (currentIndex - 1 + projects.length) % projects.length;
+    setCurrentIndex(prevIndex);
+    setSelectedProject(projects[prevIndex]);
+  };
 
   return (
     <>
@@ -48,29 +57,23 @@ function Projects() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="text-5xl font-bold text-black text-center mb-12"
+            className="text-5xl font-bold text-black text-center mb-12 animate__animated animate__fadeIn"
           >
             Our Projects
           </motion.h1>
-          <div className="projects-section grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="projects-section columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
             {projects.map((project, index) => (
               <motion.div
-                key={project.title}
-                className="project-card relative overflow-hidden rounded-lg shadow-lg cursor-pointer transform-style-3d"
+                key={index}
+                className="project-card break-inside-avoid mb-4 overflow-hidden rounded-lg shadow-lg cursor-pointer transform-style-3d animate__animated animate__fadeInUp"
                 whileHover={{ scale: 1.05, rotateX: 5, rotateY: 5 }}
-                onClick={() => setSelectedProject(project)}
+                onClick={() => openModal(index)}
               >
                 <img
                   src={project.img}
-                  alt={project.title}
-                  className="w-full h-64 object-cover"
+                  alt=""
+                  className="w-full h-auto object-cover"
                 />
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <div className="text-center text-white">
-                    <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-                    <FaEye size={24} />
-                  </div>
-                </div>
               </motion.div>
             ))}
           </div>
@@ -79,26 +82,47 @@ function Projects() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 perspective-1000"
-            onClick={() => setSelectedProject(null)}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-gray-900/90 flex items-center justify-center z-50 perspective-1000 animate__animated animate__fadeIn"
+            onClick={closeModal}
           >
             <motion.div
-              className="bg-offwhite p-8 rounded-lg max-w-3xl w-full transform-style-3d"
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              whileHover={{ rotateX: 5 }}
+              className="bg-white p-6 rounded-xl shadow-2xl max-w-4xl w-full transform-style-3d relative"
+              initial={{ scale: 0.9, y: 50 }}
+              animate={{ scale: 1, y: 0 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
               onClick={(e) => e.stopPropagation()}
             >
-              <h3 className="text-2xl font-bold text-black mb-4">{selectedProject.title}</h3>
-              <img src={selectedProject.img} alt={selectedProject.title} className="w-full h-64 object-cover rounded-lg mb-4" />
-              <p className="text-gray text-lg">{selectedProject.desc}</p>
               <button
-                className="mt-6 bg-gradient-to-r from-blue to-blue/80 text-white py-2 px-4 rounded-lg hover:bg-black transition-colors flex items-center space-x-2 transform-style-3d"
-                style={{ transform: 'translateZ(20px)' }}
-                onClick={() => setSelectedProject(null)}
+                className="absolute top-4 right-4 text-gray-600 hover:text-black transition-colors z-10"
+                onClick={closeModal}
               >
-                <FaTimes /> <span>Close</span>
+                <FaTimes size={24} />
               </button>
+              <div className="relative">
+                <img
+                  src={selectedProject.img}
+                  alt=""
+                  className="w-full h-[500px] object-contain rounded-lg"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-lg"></div>
+              </div>
+              <div className="flex justify-between items-center mt-4 px-2 z-10">
+                <button
+                  className="bg-blue-600 text-white p-4 rounded-full hover:bg-blue-700 transition-colors flex items-center space-x-2 transform-style-3d z-10"
+                  style={{ minWidth: '100px', padding: '10px 20px' }}
+                  onClick={prevImage}
+                >
+                  <FaArrowLeft /> <span className="hidden sm:inline">Previous</span>
+                </button>
+                <button
+                  className="bg-blue-600 text-white p-4 rounded-full hover:bg-blue-700 transition-colors flex items-center space-x-2 transform-style-3d z-10"
+                  style={{ minWidth: '100px', padding: '10px 20px' }}
+                  onClick={nextImage}
+                >
+                  <span className="hidden sm:inline">Next</span> <FaArrowRight />
+                </button>
+              </div>
             </motion.div>
           </motion.div>
         )}

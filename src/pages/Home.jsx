@@ -15,6 +15,40 @@ gsap.registerPlugin(ScrollTrigger);
 function Home() {
   const statsRef = useRef(null);
 
+  useEffect(() => {
+    gsap.fromTo(
+      '.feature-card',
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1,
+        y: 0,
+        stagger: 0.2,
+        duration: 0.8,
+        scrollTrigger: {
+          trigger: '.features-section',
+          start: 'top 80%',
+        },
+      }
+    );
+
+    gsap.fromTo(
+      statsRef.current?.children,
+      { opacity: 0, scale: 0.8 },
+      {
+        opacity: 1,
+        scale: 1,
+        stagger: 0.3,
+        duration: 1,
+        scrollTrigger: {
+          trigger: statsRef.current,
+          start: 'top 80%',
+        },
+      }
+    );
+
+    return () => ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+  }, []);
+
   const carouselSettings = {
     dots: true,
     infinite: true,
@@ -39,38 +73,6 @@ function Home() {
     centerMode: true,
     centerPadding: '0',
   };
-
-  useEffect(() => {
-    gsap.fromTo(
-      '.feature-card',
-      { opacity: 0, y: 50 },
-      {
-        opacity: 1,
-        y: 0,
-        stagger: 0.2,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: '.features-section',
-          start: 'top 80%',
-        },
-      }
-    );
-
-    gsap.fromTo(
-      statsRef.current.children,
-      { opacity: 0, scale: 0.8 },
-      {
-        opacity: 1,
-        scale: 1,
-        stagger: 0.3,
-        duration: 1,
-        scrollTrigger: {
-          trigger: statsRef.current,
-          start: 'top 80%',
-        },
-      }
-    );
-  }, []);
 
   return (
     <>
@@ -98,12 +100,12 @@ function Home() {
         </script>
       </Helmet>
       <div
-  className="bg-blue text-white py-2 text-center text-lg font-semibold whitespace-nowrap overflow-hidden"
->
-  <div className="inline-block px-6">
-    🚧 Serving Calgary with Premium Garage Builds & Renovations since 2000 • Free Quotes Available • Trusted by 1000+ Clients • Quality You Can Count On 🚧
-  </div>
-</div>
+        className="bg-blue-800 text-white py-2 text-center text-lg font-semibold whitespace-nowrap overflow-hidden"
+      >
+        <div className="inline-block px-6 text-blue">
+          🚧 Serving Calgary with Premium Garage Builds & Renovations since 2000 • Free Quotes Available • Trusted by 1000+ Clients • Quality You Can Count On 🚧
+        </div>
+      </div>
 
       <section className="relative min-h-screen flex items-center justify-center perspective-1000">
         <Slider {...carouselSettings} className="w-full h-screen">
@@ -117,12 +119,13 @@ function Home() {
                 src={slide.img}
                 alt={slide.title}
                 className="w-full h-full object-cover"
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
                 <motion.div
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 1.2, ease: 'easeOut' }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
                   className="text-center max-w-7xl text-white z-10 transform-style-3d"
                   whileHover={{ rotateX: 5 }}
                 >
@@ -135,7 +138,7 @@ function Home() {
                   <motion.div whileHover={{ scale: 1.05, rotateY: 10 }} className="transform-style-3d">
                     <Link
                       to="/contact"
-                      className="inline-block bg-blue text-white py-4 px-10 rounded-full max-w-sm text-lg font-semibold hover:bg-black transition-colors flex items-center justify-center space-x-2 mx-auto"
+                      className="inline-block bg-blue-600 text-white py-4 px-10 rounded-full max-w-sm text-lg font-semibold hover:bg-black transition-colors flex items-center justify-center space-x-2 mx-auto"
                     >
                       <FaEnvelope /> <span>Get a Free Quote</span>
                     </Link>
@@ -146,13 +149,13 @@ function Home() {
           ))}
         </Slider>
       </section>
-      <section className="features-section py-16 bg-offwhite">
+      <section className="features-section py-16 bg-gray-100">
         <div className="container mx-auto px-6 flex flex-col items-center">
           <motion.h2
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="text-4xl font-bold text-black text-center mb-12"
+            className="text-4xl font-bold text-gray-800 text-center mb-12"
           >
             Why Choose KARTAR Construction
           </motion.h2>
@@ -164,12 +167,15 @@ function Home() {
             ].map((feature) => (
               <Tilt key={feature.title} tiltMaxAngleX={20} tiltMaxAngleY={20} perspective={1000}>
                 <motion.div
-                  className="feature-card bg-offwhite p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow flex flex-col items-center transform-style-3d"
+                  className="feature-card bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow flex flex-col items-center transform-style-3d"
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
                   whileHover={{ scale: 1.05, rotateX: 5, rotateY: 5 }}
                 >
-                  <div className="text-blue mb-4">{feature.icon}</div>
-                  <h3 className="text-xl font-semibold text-black mb-2 text-center">{feature.title}</h3>
-                  <p className="text-gray text-center">{feature.desc}</p>
+                  <div className="text-blue-600 mb-4">{feature.icon}</div>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2 text-center">{feature.title}</h3>
+                  <p className="text-gray-600 text-center">{feature.desc}</p>
                 </motion.div>
               </Tilt>
             ))}
@@ -202,85 +208,81 @@ function Home() {
                   author: "Emily R., Homeowner",
                 },
               ].map((testimonial, index) => (
-                <div key={index} className="px-2"> {/* This adds space between cards */}
-                <motion.div
-                  key={index}
-                  className="p-6 bg-offwhite rounded-lg shadow-lg flex flex-col items-center transform-style-3d perspective-1000"
-                  whileHover={{ rotateX: 5, rotateY: 5 }}
-                >
-                  <FaQuoteLeft className="text-blue text-3xl mb-4" />
-                  <p className="text-gray text-center mb-4">{testimonial.quote}</p>
-                  <p className="text-black font-semibold">{testimonial.author}</p>
-                </motion.div>
+                <div key={index} className="px-2">
+                  <motion.div
+                    className="p-6 bg-white rounded-lg shadow-lg flex flex-col items-center transform-style-3d perspective-1000"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    whileHover={{ rotateX: 5, rotateY: 5 }}
+                  >
+                    <FaQuoteLeft className="text-blue-600 text-3xl mb-4" />
+                    <p className="text-gray-700 text-center mb-4">{testimonial.quote}</p>
+                    <p className="text-gray-900 font-semibold">{testimonial.author}</p>
+                  </motion.div>
                 </div>
               ))}
             </Slider>
           </div>
         </div>
       </section>
-      <section className="py-16 bg-blue">
+      <section className="py-16 bg-blue-800">
         <div className="container mx-auto px-6 flex flex-col items-center">
           <motion.h2
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="text-4xl font-bold text-white text-center mb-12"
+            className="text-4xl font-bold text-black text-center mb-12"
           >
             Our Achievements
           </motion.h2>
           <div ref={statsRef} className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl w-full text-center">
             <motion.div
               className="bg-white p-6 rounded-lg shadow-lg transform-style-3d perspective-1000"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
               whileHover={{ rotateX: 5, rotateY: 5 }}
             >
-              <motion.div
-                className="text-3xl font-bold text-blue mb-2 flex items-center justify-center space-x-2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
-              >
+              <div className="text-3xl font-bold text-blue-600 mb-2 flex items-center justify-center space-x-2">
                 <FaStar /> <span>25+</span>
-              </motion.div>
-              <p className="text-gray">Years of Experience</p>
+              </div>
+              <p className="text-gray-600">Years of Experience</p>
             </motion.div>
             <motion.div
               className="bg-white p-6 rounded-lg shadow-lg transform-style-3d perspective-1000"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
               whileHover={{ rotateX: 5, rotateY: 5 }}
             >
-              <motion.div
-                className="text-3xl font-bold text-blue mb-2 flex items-center justify-center space-x-2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
-              >
+              <div className="text-3xl font-bold text-blue-600 mb-2 flex items-center justify-center space-x-2">
                 <FaBuilding /> <span>1000+</span>
-              </motion.div>
-              <p className="text-gray">Projects Completed</p>
+              </div>
+              <p className="text-gray-600">Projects Completed</p>
             </motion.div>
             <motion.div
               className="bg-white p-6 rounded-lg shadow-lg transform-style-3d perspective-1000"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
               whileHover={{ rotateX: 5, rotateY: 5 }}
             >
-              <motion.div
-                className="text-3xl font-bold text-blue mb-2 flex items-center justify-center space-x-2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
-              >
+              <div className="text-3xl font-bold text-blue-600 mb-2 flex items-center justify-center space-x-2">
                 <FaStar /> <span>98%</span>
-              </motion.div>
-              <p className="text-gray">Client Satisfaction</p>
+              </div>
+              <p className="text-gray-600">Client Satisfaction</p>
             </motion.div>
           </div>
         </div>
       </section>
-      <section className="py-16 bg-offwhite">
+      <section className="py-16 bg-gray-100">
         <div className="container mx-auto px-6 flex flex-col items-center perspective-1000">
           <motion.h2
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="text-4xl font-bold text-black text-center mb-8"
+            className="text-4xl font-bold text-gray-800 text-center mb-8"
           >
             Ready to Build Your Dream Garage?
           </motion.h2>

@@ -11,7 +11,7 @@ function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    console.log('Form submitted:', formData); // Debug log
   };
 
   return (
@@ -26,7 +26,7 @@ function Contact() {
       <section className="py-16 bg-gray min-h-screen">
         <div className="container mx-auto px-6">
           <motion.h1
-            initial={{ opacity: 0 }}
+            initial={{ opacity: 0.5 }} // Start slightly visible
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
             className="text-5xl font-bold text-black text-center mb-12"
@@ -35,7 +35,7 @@ function Contact() {
           </motion.h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <motion.form
-              initial={{ opacity: 0, x: -50 }}
+              initial={{ opacity: 0.5, x: -20 }} // Start slightly visible with minimal offset
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
               onSubmit={handleSubmit}
@@ -88,15 +88,16 @@ function Contact() {
               </div>
               <motion.button
                 type="submit"
-                className="w-full bg-orange text-white py-3 px-6 rounded-lg hover:bg-black transition-colors"
-                whileHover={{ scale: 1.05 }}
+                className="w-full bg-gray-950 text-white py-3 px-6 rounded-lg hover:bg-gray-900 transition-colors z-10" // Darker orange, added z-10
+                // whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => console.log('Button clicked')} // Debug log
               >
                 Send Message
               </motion.button>
             </motion.form>
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
+              initial={{ opacity: 0.5, x: 20 }} // Start slightly visible with minimal offset
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
               className="space-y-6"
@@ -115,6 +116,8 @@ function Contact() {
                   style={{ border: 0 }}
                   allowFullScreen=""
                   loading="lazy"
+                  title="Google Map"
+                  onError={(e) => console.log('Map failed to load:', e)} // Debug map load
                 ></iframe>
               </div>
             </motion.div>
